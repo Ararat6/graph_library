@@ -4,18 +4,13 @@
 vertex* graph::add_vertex(const std::string& name)
 {
 	vertex* current_vertex = NULL;
-	if(NULL != m_vertices) {
-		current_vertex = get_vertex_by_name(name);
-	} else{
-		m_vertices = new std::vector<vertex*>;
-	}
-
+	current_vertex = m_vertices[name];
 	if(NULL != current_vertex) {
 		return current_vertex;
 	}
 	current_vertex = new vertex(name);
 	if(NULL != current_vertex) {
-		m_vertices->push_back(current_vertex);
+		m_vertices[name] = current_vertex;
 		return current_vertex;
 	} else {
 		//TODO exception CANNOT create vertex";
@@ -25,16 +20,8 @@ vertex* graph::add_vertex(const std::string& name)
 
 vertex* graph::get_vertex_by_name(const std::string& name) 
 {
-    //size_t size = m_vertices->size(); 
-    //std::cout << "graph size " <<size<<std::endl;
-    std::vector<vertex*> ::iterator it = m_vertices->begin();
-    std::vector<vertex*> ::iterator end   = m_vertices->end();
-    for(; it != end; ++it) {
-        if(0 == (*it)->get_name().compare(name)) {
-            return *it;
-        }
-    }
-    return NULL;
+	vertex* vertex_by_name = m_vertices[name];
+    return vertex_by_name;
 }
 
 void graph::add_edge(vertex* source, vertex* destination)
@@ -82,17 +69,17 @@ void graph::set_edge_weight(edge_weight weight)
 
 int graph::get_vertices_count() const
 {
-	return m_vertices->size();
+	return m_vertices.size();
 }
 
-void graph::show_graph() const
+void graph::show_graph() const 
 {
-	std::vector<vertex*>::iterator it = m_vertices->begin();
-	std::vector<vertex*>::iterator end = m_vertices->end();
+	std::map<std::string, vertex*>::iterator it = m_vertices.begin();
+	std::map<std::string, vertex*>::iterator end = m_vertices.end();
 	for(; it != end; ++it) {
-		std::vector<base_edge*>::iterator _it = (*it)->get_edges()->begin();
-		std::vector<base_edge*>::iterator _end = (*it)->get_edges()->end();
-		std::cout<< "\n" << "---name vertex = " << (*it)->get_name();
+		std::vector<base_edge*>::iterator _it = it->second->get_edges()->begin();
+		std::vector<base_edge*>::iterator _end = it->second->get_edges()->end();
+		std::cout<< "\n" << "---name vertex = " << it->first;
 		for( ; _it != _end; ++_it){
 			std::cout << "\n    |s_vertex = " << (*_it)->get_source_vertex()->get_name() << "|"
 				<< "      |d_vertex = " << (*_it)->get_destination_vertex()->get_name() << "|"
@@ -103,7 +90,7 @@ void graph::show_graph() const
 }
 
 graph::graph()
-	: m_vertices(NULL) 
+//	: m_vertices(NULL) 
 {}
 
 graph::~graph()

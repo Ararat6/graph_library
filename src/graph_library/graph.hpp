@@ -6,7 +6,7 @@
 #include "edge.hpp"
 #include "base_edge.hpp"
 #include <string>
-#include <vector>
+#include <map>
 
 
 /** Definition of types of graph */ 
@@ -22,7 +22,7 @@ class graph
 {
 private:
     /** Vector of all vertices */
-    std::vector<vertex*>* m_vertices;
+    std::map<std::string, vertex*> m_vertices;
     /** Member for fix graph direction type */
     direction m_direction;
 	edge_weight m_edge_weight;
