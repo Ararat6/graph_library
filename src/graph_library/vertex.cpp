@@ -1,6 +1,6 @@
 #include "vertex.hpp"
 
-std::vector<base_edge*>* vertex::get_edges()
+const std::vector<base_edge*>* vertex::get_edges() const
 {
 	return &m_edges;
 }
@@ -36,12 +36,28 @@ bool vertex::get_visited() const
 	return m_is_visited;
 }
 
-vertex::vertex(const std::string& name)
-   // :m_name(name)
+vertex::vertex(const std::string& name):m_degree(0)
 {
     m_name = name;
 }
 
 vertex::~vertex()
 {
+	std::vector<base_edge*>::iterator it = m_edges.begin();
+	std::vector<base_edge*>::iterator end = m_edges.end();
+	for(; it !=end; ++it ) {
+		if(NULL != *it) {
+			delete *it;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+

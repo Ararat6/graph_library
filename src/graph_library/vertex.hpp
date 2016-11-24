@@ -1,9 +1,9 @@
 #ifndef _VERTEX_HPP_
 #define _VERTEX_HPP_
+#include "base_edge.hpp"
 #include <vector>
 #include <string>
-
-class base_edge;
+//class base_edge;
 
 /** 
   * @brief
@@ -23,7 +23,7 @@ public:
     /** For adding edge in vertex */
     void add_edge(base_edge* node_edge);
     /** For getting edges of vertex */
-	std::vector<base_edge*>* get_edges();
+	const std::vector<base_edge*>* get_edges() const;
     /** For getting vertex degree */
     int get_degree() const;
 	void add_degree();

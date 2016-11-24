@@ -30,21 +30,24 @@ void graph::add_edge(vertex* source, vertex* destination)
 	b_edge->set_source_vertex(source);
 	b_edge->set_destination_vertex(destination);
 	source->add_edge(b_edge);
+	source->add_degree();
 	if(get_direction() == undirected) {
 		destination->add_edge(b_edge);
+		destination->add_degree();
 	}
 
 }
 
 void graph::add_edge(vertex* source, vertex* destination, int weight)
 {
-	base_edge* b_edge = new weighted_edge(new edge, weight);
-	//base_edge* b_edge = new weighted_edge(weight);
+	base_edge* b_edge = new weighted_edge(weight);
 	b_edge->set_source_vertex(source);
 	b_edge->set_destination_vertex(destination);
 	source->add_edge(b_edge);
+	source->add_degree();
 	if(get_direction() == undirected) {
 		destination->add_edge(b_edge);
+		destination->add_degree();
 	}
 }
 
@@ -72,26 +75,37 @@ int graph::get_vertices_count() const
 	return m_vertices.size();
 }
 
-void graph::show_graph() const 
+void graph::show_graph() 
 {
 	std::map<std::string, vertex*>::iterator it = m_vertices.begin();
 	std::map<std::string, vertex*>::iterator end = m_vertices.end();
 	for(; it != end; ++it) {
-		std::vector<base_edge*>::iterator _it = it->second->get_edges()->begin();
-		std::vector<base_edge*>::iterator _end = it->second->get_edges()->end();
-		std::cout<< "\n" << "---name vertex = " << it->first;
+		std::vector<base_edge*>::const_iterator _it = it->second->get_edges()->begin();
+		std::vector<base_edge*>::const_iterator _end = it->second->get_edges()->end();
+//		system("Color 4D");
+		const std::string col("\033[1;92m");
+		const std::string cole("\033[0m");
+		std::cout << col << "Vertex Name = " << it->first << cole;
+		std::cout <<"\nv_degree = " << it->second->get_degree() ;
 		for( ; _it != _end; ++_it){
 			std::cout << "\n    |s_vertex = " << (*_it)->get_source_vertex()->get_name() << "|"
 				<< "      |d_vertex = " << (*_it)->get_destination_vertex()->get_name() << "|"
-				<< "      |weight edge = " << (*_it)->get_weight()  << "|";
+				<< "      |weight edge = " << (*_it)->get_weight()  << "|"  ;
 		}
 		std::cout << "\n\n";
 	}
+	
 }
 
 graph::graph()
-//	: m_vertices(NULL) 
 {}
 
 graph::~graph()
-{}
+{
+	std::map<std::string, vertex*>::iterator it = m_vertices.begin();
+	std::map<std::string, vertex*>::iterator end = m_vertices.end();
+	for(; it != end; ++it) {
+		delete it->second;
+	}
+}
+

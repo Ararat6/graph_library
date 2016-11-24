@@ -40,7 +40,7 @@ prefix := $(HOME)
 #
 projects :=  \
 	src/graph_library \
-	src/graph_test    \
+#src/graph_test    \
 
 
 # Prerequisite tools

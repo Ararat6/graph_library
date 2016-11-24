@@ -17,14 +17,14 @@
 #
 
 # The source files under the project.
-cpp_files := vertex.cpp \
+cpp_files := test.cpp  \
+			 vertex.cpp \
 			 edge.cpp \
 			 graph.cpp \
 			 input_parser.cpp \
 			 base_edge.cpp \
 			 weighted_edge.cpp \
-			 param_edge.cpp \
-
+			
 # The header files under the project, which are supposed to be used by other
 # projects.
 public_headers := 

@@ -1,5 +1,6 @@
 #include "edge.hpp"
 
+
 int edge::get_weight() 
 {
 	return 0;
@@ -8,4 +9,5 @@ int edge::get_weight()
 edge::edge():base_edge()
 {}
 
-edge::~edge(){}
+edge::~edge()
+{}

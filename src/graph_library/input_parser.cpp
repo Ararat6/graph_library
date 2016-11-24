@@ -7,42 +7,34 @@ graph* input_parser::create_graph(std::string &file_path)
 	graph* current_graph = m_graphs[file_path];
 	if(NULL == current_graph) {
 		current_graph = new graph();
+		m_graphs[file_path] = current_graph;
 	} else {
 		return current_graph;
 	}
-
 	std::string line;
 	std::stringstream buffer;
 	read_file(file_path, buffer);
-
-//	if("" != buffer) {
-		if(getline( buffer, line )) { 
-			std::istringstream iss(line);
-
-			if(!init_parameter(line, current_graph)) {
-				//TODO generate exp
-				return NULL;
-			}
-		} else {
-			std::cout << "buferr read exception" << std::endl;
+	if(getline( buffer, line )) { 
+		std::istringstream iss(line);
+		if(!init_parameter(line, current_graph)) {
+			//TODO generate exp
 			return NULL;
 		}
-		if(parse_graph(buffer, current_graph)) {
-			if( m_vertices_count != current_graph->get_vertices_count()) {
-				std::cout << "exception graph  creation count" << std::endl;
-				return NULL; 
-			} else {
-				return current_graph;
-			}
-		} else {
-			std::cout << "exception graph  creation " << std::endl;
-			return NULL;
-		}
-
-/*	} else {
-		//genereta excp
+	} else {
+		std::cout << "buferr read exception" << std::endl;
 		return NULL;
-	}*/
+	}
+	if(parse_graph(buffer, current_graph)) {
+		if( m_vertices_count != current_graph->get_vertices_count()) {
+			std::cout << "exception graph  creation count" << std::endl;
+			return NULL; 
+		} else {
+			return current_graph;
+		}
+	} else {
+		std::cout << "exception graph  creation " << std::endl;
+		return NULL;
+	}
 }
 
 void input_parser::read_file(const std::string& file_path, std::stringstream& buffer)
@@ -133,7 +125,7 @@ bool input_parser::parse_graph(std::stringstream& buffer, graph* current_graph)
 	while(getline(buffer, line)) {
 		std::istringstream iss(line);
 		std::string word = "";
-		int weight = 0;
+		weight = 0;
 		vertex* source = NULL; 
 		vertex* destination = NULL;
 		

@@ -23,3 +23,6 @@ vertex* base_edge::get_destination_vertex() const
 base_edge::base_edge():m_source_vertex(NULL)
 		              ,m_destination_vertex(NULL)
 {}
+
+base_edge::~base_edge()
+{}

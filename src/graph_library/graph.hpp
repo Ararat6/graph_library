@@ -40,7 +40,7 @@ public:
 	edge_weight get_edge_weight() const;
 	void set_edge_weight(edge_weight weight);
 	int get_vertices_count() const;
-	void show_graph() const;
+	void show_graph();
 public:
     /** Constructor */
     graph();

@@ -31,5 +31,7 @@ public:
     vertex* get_destination_vertex() const;
 protected:
 	base_edge();
+public:
+	virtual ~base_edge();
 };
 #endif  //_BASE_EDGE_HPP_
