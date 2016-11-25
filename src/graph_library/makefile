@@ -17,8 +17,7 @@
 #
 
 # The source files under the project.
-cpp_files := test.cpp  \
-			 vertex.cpp \
+cpp_files := vertex.cpp \
 			 edge.cpp \
 			 graph.cpp \
 			 input_parser.cpp \
@@ -27,7 +26,12 @@ cpp_files := test.cpp  \
 			
 # The header files under the project, which are supposed to be used by other
 # projects.
-public_headers := 
+public_headers := vertex.hpp \
+				  edge.hpp \
+				  graph.hpp \
+				  input_parser.hpp \
+				  base_edge.hpp \
+				  weighted_edge.hpp \
 
 # Building QT project.
 # TODO: Add detailed comments.
@@ -97,4 +101,4 @@ lib_version :=
 # (by default $(project_root)/lib/).
 #
 
-include $(mkf_path)/exe.mk
+include $(mkf_path)/lib.mk

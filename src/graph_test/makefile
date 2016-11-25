@@ -21,7 +21,7 @@ cpp_files := test.cpp \
 
 # The header files under the project, which are supposed to be used by other
 # projects.
-public_headers :=  test.cpp\
+public_headers := \
 
 # Building QT project.
 # TODO: Add detailed comments.
@@ -65,8 +65,7 @@ linker_flags += -lstdc++ -ldl
 # 
 # Note: Specifying the library version is not supported.
 #
-libs := \
-	graph_library \
+libs :=	graph_library \
 
 # Library version
 #

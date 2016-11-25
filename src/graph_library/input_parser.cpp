@@ -1,6 +1,7 @@
 #include "input_parser.hpp"
 #include <stdlib.h>
 
+//TODO
 graph* input_parser::create_graph(std::string &file_path)
 {
 	m_vertices_count = 0;
@@ -16,7 +17,7 @@ graph* input_parser::create_graph(std::string &file_path)
 	read_file(file_path, buffer);
 	if(getline( buffer, line )) { 
 		std::istringstream iss(line);
-		if(!init_parameter(line, current_graph)) {
+		if(! init_parameter(line, current_graph)) {
 			//TODO generate exp
 			return NULL;
 		}
@@ -50,8 +51,8 @@ void input_parser::read_file(const std::string& file_path, std::stringstream& bu
 bool input_parser::init_parameter(std::string first_line, graph* current_graph)
 {
 	std::istringstream iss(first_line);
-	std::string str_direction ;
-	if(iss >> str_direction) {
+	std::string str_direction;
+	if (iss >> str_direction) {
 		if ( 0 == str_direction.compare("0") ) {
 			current_graph->set_direction(undirected);
 		}
@@ -67,7 +68,7 @@ bool input_parser::init_parameter(std::string first_line, graph* current_graph)
 		std::cout << "Incorrect input format" << std::endl;
 		return false;
 	}
-	std::string str_vertex_count ;
+	std::string str_vertex_count;
 	if(iss >> str_vertex_count) {
 		int int_vertex_count;
 		int_vertex_count = atoi(str_vertex_count.c_str());
@@ -83,7 +84,7 @@ bool input_parser::init_parameter(std::string first_line, graph* current_graph)
 		std::cout << "Incorrect input format, for count " << std::endl;
 		return false;
 	}
-	std::string str_weight ;
+	std::string str_weight;
 	if(iss >> str_weight) {
 		if ( 0 == str_weight.compare("1") ) {
 			current_graph->set_edge_weight(weighted);
@@ -99,7 +100,7 @@ bool input_parser::init_parameter(std::string first_line, graph* current_graph)
 		std::cout << "Incorrect input format, for edge weight set (1) or (0) " << std::endl;
 		return false;
 	}
-	
+
 
 	std::string word;
 	if(iss >> word){
@@ -154,6 +155,7 @@ bool input_parser::parse_graph(std::stringstream& buffer, graph* current_graph)
 			std::cout << "Don't input more arguments " << std::endl;
 			return false;
 		}
+
 		if( NULL == destination) {
 			//TODO excp
 			std::cout << "Please input correct vertices " << std::endl;

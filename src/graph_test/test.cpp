@@ -1,14 +1,12 @@
-#include "graph.hpp"
-#include "weighted_edge.hpp"
-#include "base_edge.hpp"
-#include "edge.hpp"
-#include "input_parser.hpp"
+#include <graph_library/graph.hpp>
+#include <graph_library/weighted_edge.hpp>
+#include <graph_library/base_edge.hpp>
+#include <graph_library/edge.hpp>
+#include <graph_library/input_parser.hpp>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
-
-
 
 int main()
 {	
@@ -16,15 +14,21 @@ int main()
 	/*std::string file_path = "./graph.txt";
 	input_parser pars;
         pars.create_graph(file_path);	*/
+	//TODO: make 
     std::string file_path = "./graph.txt";
     input_parser parser;
-    graph* test_graph = parser.create_graph(file_path);
+	graph* test_graph = parser.create_graph(file_path);
 //    std::vector<vertex*>* vertices = parser.get_vertices();
 
-	if(NULL != test_graph){
-    	std::cout << "test dir = " << test_graph->get_direction() << "\n";
+	if(NULL != test_graph) {
+		if(directed == test_graph->get_direction()){
+    		std::cout << "\nDirected Graph " << "\n";
+		} else {
+    		std::cout << "\nUndirected Graph " << "\n";
+		}
 		test_graph->show_graph();
 	}     
+
 
 	//base_edge* ed = new edge();
 	//std::cout << ed->get_weight() << std::endl;

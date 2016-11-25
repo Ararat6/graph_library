@@ -40,7 +40,7 @@ prefix := $(HOME)
 #
 projects :=  \
 	src/graph_library \
-#src/graph_test    \
+	src/graph_test    \
 
 
 # Prerequisite tools
@@ -96,7 +96,7 @@ export RPATHS :=
 mkf_path := ~/mkf/mkf
 
 include $(mkf_path)/main.mk
-include $(mkf_path)/doc.mk
+#include $(mkf_path)/doc.mk
 
 # Dependencies between projects
 #
