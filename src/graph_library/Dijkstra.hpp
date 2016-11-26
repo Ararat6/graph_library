@@ -1,33 +1,38 @@
 #ifndef _DIJKSTRA_HPP_
 #define _DIJKSTRA_HPP_
 
-#include "shoortest_path.hpp"
+#include "shortest_path.hpp"
+#include "algorithm.hpp"
 #include "graph.hpp"
 #include <vector>
 #include <string>
 #include <queue>
 #include <map>
 
-
-class Dijkstra: public shoortest_path
+class Dijkstra: public shortest_path
 { 
-	int m_distance;
-	graph* m_graph;
-	vertex* source_vertex;
-	vertex* destination_vertex;
+    int m_distance;
+    graph* m_graph;
+    vertex* source_vertex;
+    vertex* destination_vertex;
 
 private:
-	void set_distance(int);
-	vertex* find_vertex(std::string);
-	bool short_path_to_map(std::vector<edge*>::iterator it, std::map<vertex*,int>& v_map, bool check);
+    void set_distance(int);
+    bool short_path_to_map(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map, bool check);
+
+private:
+    void find_distance();
+    vertex* find_vertex(const std::string);
 
 public:
-	int get_distance() const;
-
-public:
-//	void set_target_graph(graph* , std::string&);
+    //	void set_target_graph(graph* , std::string&);
     void set_target_graph(graph* , const std::string&, const std::string&);
-	void shortest_path();
+
+public:
+    int short_path();
+
+public:
+    Dijkstra();
 
 };
 

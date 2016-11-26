@@ -13,13 +13,14 @@ class input_parser
 {
 private:
 	int m_vertices_count;
-    std::map <std::string , graph* > m_graphs;    
+    std::map <std::string , graph* > m_graphs;   
+    int m_line; 
 private:
 
 	bool parse_graph(std::stringstream& buffer, graph* _graph);
-	bool init_parameter(std::string first_line, graph* _graph);
+	bool set_graph_type(const std::string first_line, graph* _graph);
 	void read_file(const std::string& path, std::stringstream& buffer);
 public:
-    graph* create_graph(std::string& file_path);
+    graph* create_graph(const std::string& file_path);
 };
 #endif  //_INPUT_PARSER_HPP_

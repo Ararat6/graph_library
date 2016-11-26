@@ -1,8 +1,11 @@
-#include "graph.hpp"
 #include "weighted_edge.hpp"
-#include "base_edge.hpp"
-#include "edge.hpp"
 #include "input_parser.hpp"
+#include "algorithm.hpp"
+#include "base_edge.hpp"
+#include "search.hpp"
+#include "graph.hpp"
+#include "edge.hpp"
+#include "Dfs.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -12,40 +15,53 @@
 
 int main()
 {	
-	
-	/*std::string file_path = "./graph.txt";
-	input_parser pars;
-        pars.create_graph(file_path);	*/
+
     std::string file_path = "./graph.txt";
     input_parser parser;
-	graph* test_graph = parser.create_graph(file_path);
-//    std::vector<vertex*>* vertices = parser.get_vertices();
+    graph* test_graph = parser.create_graph(file_path);
 
-	if(NULL != test_graph){
-		if(directed == test_graph->get_direction()){
-    		std::cout << "\nDirected Graph " << "\n";
-		} else {
-    		std::cout << "\nUndirected Graph " << "\n";
-		}
-		test_graph->show_graph();
-	}     
+    if(NULL != test_graph){
+
+        if(directed == test_graph->get_direction()){
+            std::cout << "\nDirected Graph " << "\n";
+        } else {
+            std::cout << "\nUndirected Graph " << "\n";
+        }
+        test_graph->show_graph();
+    } else {
+    
+        return 0;
+    }    
 
 
-	//base_edge* ed = new edge();
-	//std::cout << ed->get_weight() << std::endl;
-	
-	//base_edge* weighted = new weighted_edge(ed, 10);
-	//std::cout << weighted->get_weight() << std::endl;
 
-	/*algorithm* alg = new search(test_graph);
-	alg -> DFS("v7");
-	alg -> BFS("v7");*/
-	/*shortest_path* alg = new shortest_path(test_graph);
-	alg -> dijkstra("v8", "v6");
-	int dist = alg -> get_distance();
-	std::cout << "distance = " << dist << std::endl;*/
+//    search * alg_search = new Dfs();
+//    alg_search  -> set_target_graph(test_graph, "v1");
 
-	
+
+
+    shortest_path * alg_shortest = new Dijkstra();
+    alg_shortest  -> set_target_graph(test_graph, "v1", "v6");
+
+
+    std::cout << "alg short = " <<    alg_shortest -> short_path() <<  std::endl; //for local test 
+
+
+
+
+/*
+    algorithm* alg;
+
+    alg -> set_shortest_path_type(alg_shortest);
+    alg -> set_search_type(alg_search);
+
+//  std::cout <<  
+    alg -> get_shortest_path() 
+//  << std::endl; 
+    alg -> traverse();
+*/
+   
+
     return 0;
 }
 

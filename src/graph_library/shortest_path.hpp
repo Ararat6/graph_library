@@ -1,14 +1,18 @@
 #ifndef _SHORTEST_PATH_HPP_
 #define _SHORTEST_PATH_HPP_
 
+#include "graph.hpp"
+#include <string>
+
 class shortest_path
 {
 
-Public:
+public:
 	/**Setting type of  shortest path  algorithm*/
-	virtual void shortest_path() = 0;
+	virtual int short_path() = 0;
+    virtual void set_target_graph(graph* , const std::string&, const std::string&) = 0;
 
-}
+};
 
 
 #endif //_SHORTEST_PATH_HPP_
