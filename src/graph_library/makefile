@@ -23,6 +23,10 @@ cpp_files := vertex.cpp \
 			 input_parser.cpp \
 			 base_edge.cpp \
 			 weighted_edge.cpp \
+			 algorithm.cpp \
+		 	 Dijkstra.cpp \
+			 Dfs.cpp \
+			 Bfs.cpp \
 			
 # The header files under the project, which are supposed to be used by other
 # projects.
@@ -32,7 +36,12 @@ public_headers := vertex.hpp \
 				  input_parser.hpp \
 				  base_edge.hpp \
 				  weighted_edge.hpp \
-
+				  algorithm.hpp \
+				  search.hpp \
+				  Dijkstra.hpp \
+				  shortest_path.hpp \
+				  Dfs.hpp \
+				  Bfs.hpp \
 # Building QT project.
 # TODO: Add detailed comments.
 qt_headers :=

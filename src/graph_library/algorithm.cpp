@@ -19,7 +19,7 @@ void algorithm::set_shortest_path_type(shortest_path* c_shortest )
 
 int algorithm::get_shortest_path()
 {
-    m_shortest_path->short_path();
+    return m_shortest_path->short_path();
 }
 
 algorithm::algorithm()

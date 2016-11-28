@@ -1,0 +1,1 @@
+cflags := -I/home/student/serob/graph_library/inc 

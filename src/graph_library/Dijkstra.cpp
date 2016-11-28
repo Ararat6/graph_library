@@ -10,7 +10,7 @@ vertex* Dijkstra::find_vertex(const std::string target_vertex)
     return m_graph->get_vertex_by_name(target_vertex);
 }
 
-bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map, bool check)
+bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map)
 {
 
     int weight_path = v_map[ (*it) -> get_destination_vertex() ];
@@ -43,7 +43,7 @@ void Dijkstra::find_distance()
         std::vector<base_edge*>::const_iterator it_end = curr_vertex->get_edges()->end();
         bool check = true;
         for(; it_begin != it_end; ++it_begin){
-            check = short_path_to_map(it_begin, v_map, check);
+            check = short_path_to_map(it_begin, v_map);
             if(check == true){
                 que.push((*it_begin)->get_destination_vertex());
             }
