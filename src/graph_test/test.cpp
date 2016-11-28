@@ -35,23 +35,22 @@ int main()
 		return 0;
 	}
 
-	//    search * alg_search = new Dfs();
-	//    alg_search  -> set_target_graph(test_graph, "v1");
+    search * alg_search = new Bfs();
+    alg_search  -> set_target_graph(test_graph, "v2");
 
 	shortest_path * alg_shortest = new Dijkstra();
-	alg_shortest  -> set_target_graph(test_graph, "v1", "v5");
+	alg_shortest  -> set_target_graph(test_graph, "v2", "v4");
 
 	algorithm alg;
 
 	alg.set_shortest_path_type(alg_shortest);
-	//    alg -> set_search_type(alg_search);
+	std::cout << "Distance betwen source and destination = " << alg.get_shortest_path() << std::endl;
+	std::cout << "\n";
 
-	std::cout << 	alg.get_shortest_path()	<< std::endl;
-	// alg -> traverse();
-
-
-
-
+	alg.set_search_type(alg_search);
+	std::cout << "Travers graph from source vertex = ";
+	alg.traverse();
+	std::cout << "\n";
 
 	return 0;
 }

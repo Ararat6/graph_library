@@ -6,6 +6,9 @@ void Dfs::set_target_graph(graph* c_graph, const std::string& c_vertex)
 	target_vertex =  c_vertex;
 
 }
+void Dfs::show_traversal()
+{
+}
 
 void Dfs::traverse()
 {

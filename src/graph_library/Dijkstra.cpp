@@ -97,7 +97,6 @@ void Dijkstra::set_target_graph(graph* c_graph, const std::string& source, const
 int  Dijkstra::short_path()
 {
     find_distance();
-    std::cout << "short path\n" << std::endl;
     return m_distance;
 }
 

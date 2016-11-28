@@ -13,6 +13,7 @@ class Dfs: public search
 
 public:
 	    void set_target_graph(graph* , const std::string& );
+		void show_traversal();
 	    void traverse();
 
 };

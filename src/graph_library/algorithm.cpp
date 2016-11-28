@@ -10,11 +10,10 @@ void algorithm::set_shortest_path_type(shortest_path* c_shortest )
     m_shortest_path = c_shortest;
 }
 
-/*std::vector<vertex*>*/void algorithm::traverse()
+void algorithm::traverse()
 {
-	//return m_search;
-
-
+	m_search->traverse();
+	m_search->show_traversal();
 }
 
 int algorithm::get_shortest_path()
