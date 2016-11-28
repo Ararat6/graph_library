@@ -23,7 +23,7 @@ public:
 	/**Setting type of  shortest path algorithm*/
 	void set_shortest_path_type(shortest_path* ); 
 	/**       */
-	/*std::vector<vertex*>*/ void traverse();
+	void traverse();
 	int get_shortest_path(); 
 public:
 	algorithm(); 

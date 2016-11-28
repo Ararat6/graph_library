@@ -4,8 +4,10 @@
 //TODO
 graph* input_parser::create_graph(const std::string &file_path)
 {
-	m_vertices_count = 0;
     m_line = 0;
+	m_vertices_count = 0;
+	std::stringstream buffer;
+	
 	graph* current_graph = m_graphs[file_path];
 	if(NULL == current_graph) {
 		current_graph = new graph();
@@ -13,40 +15,17 @@ graph* input_parser::create_graph(const std::string &file_path)
 	} else {
 		return current_graph;
 	}
-	std::string line;
-	std::stringstream buffer;
+
 	read_file(file_path, buffer);
 
-
-
-	if(getline( buffer, line )) { 
-		std::istringstream iss(line);
-        ++m_line;
-		if(! set_graph_type(line, current_graph)) {
-			//TODO generate exp
-			return NULL;
-		}
-	} else {
-        std::cout << "\033[1;31m" <<  " fatal error: " << "\033[0m";
-		std::cout << "Buferr read exception, not input file or empty file\n" << std::endl;
+	if(!check_first_line(buffer, current_graph)){
 		return NULL;
 	}
 
-
-
-
-	if(parse_graph(buffer, current_graph)) {
-		if( m_vertices_count != current_graph->get_vertices_count()) {
-            std::cout << "graph.txt:1:\033[1;31m" <<  " error: " << "\033[0m";
-			std::cout << "Exception graph  creation, set correct count of vertices\n" << std::endl;
-			return NULL; 
-		} else {
-			return current_graph;
-		}
-	} else {
-        std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
-		std::cout << "Exception graph  creation \n" << std::endl;
+	if(!parsing(buffer, current_graph)){
 		return NULL;
+	} else {
+		return current_graph;
 	}
 }
 
@@ -60,9 +39,76 @@ void input_parser::read_file(const std::string& file_path, std::stringstream& bu
 	} 
 }
 
+bool input_parser::check_first_line(std::stringstream& buffer, graph* current_graph)
+{
+	std::string line;
+	if(getline( buffer, line )) { 
+		std::istringstream iss(line);
+		++m_line;
+		if(! set_graph_type(line, current_graph)) {
+			//TODO generate exp
+			return false;
+		}
+	} else {
+		std::cout << "\033[1;31m" <<  " fatal error: " << "\033[0m";
+		std::cout << "Buferr read exception, not input file or empty file\n" << std::endl;
+		return false;
+	}
+	return true;
+}
+
+
+bool input_parser::parsing(std::stringstream& buffer, graph* current_graph)
+{
+	if(parse_graph(buffer, current_graph)) {
+		if( m_vertices_count != current_graph->get_vertices_count()) {
+            std::cout << "graph.txt:1:\033[1;31m" <<  " error: " << "\033[0m";
+			std::cout << "Exception graph  creation, set correct count of vertices\n" << std::endl;
+			return false; 
+		} else {
+			return true;
+		}
+	} else {
+        std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
+		std::cout << "Exception graph  creation \n" << std::endl;
+		return false;
+	}
+}
+
+
 bool input_parser::set_graph_type(const std::string first_line, graph* current_graph)
 {
 	std::istringstream iss(first_line);
+
+	if(!set_graph_direction_type(iss, current_graph)){
+		return false;
+	}
+
+
+	if(!set_graph_vertices_count(iss)){
+		return false;
+	}
+
+
+	if(!set_graph_weighted_type(iss, current_graph)){
+		return false;
+	}
+
+
+	std::string word;
+	if(iss >> word){
+		//TODO excp
+        std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
+		std::cout << "Don't input more arguments in line of about your graph\n" << std::endl;
+		return false;
+	}
+
+	return true;
+}		
+
+bool input_parser::set_graph_direction_type(std::istringstream& iss, graph* current_graph) 
+{
+	
 	std::string str_direction;
 	if (iss >> str_direction) {
 		if ( 0 == str_direction.compare("0") ) {
@@ -73,15 +119,22 @@ bool input_parser::set_graph_type(const std::string first_line, graph* current_g
 			current_graph->set_direction(directed);
 		} else {
 			//TODO generate excp
-            std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
+			std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
 			std::cout << "Incorrect input format, for directon set (1) or (0) \n" << std::endl;
 			return false;
 		}
 	} else {
-        std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
+		std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
 		std::cout << "Incorrect input format, set graph type\n" << std::endl;
 		return false;
 	}
+	return true;
+
+}
+
+
+bool input_parser::set_graph_vertices_count(std::istringstream& iss)
+{
 	std::string str_vertex_count;
 	if(iss >> str_vertex_count) {
 		int int_vertex_count;
@@ -100,6 +153,15 @@ bool input_parser::set_graph_type(const std::string first_line, graph* current_g
 		std::cout << "Incorrect input format, for count \n" << std::endl;
 		return false;
 	}
+
+	return true;
+
+}
+
+
+bool input_parser::set_graph_weighted_type(std::istringstream& iss, graph* current_graph)
+{
+
 	std::string str_weight;
 	if(iss >> str_weight) {
 		if ( 0 == str_weight.compare("1") ) {
@@ -119,17 +181,11 @@ bool input_parser::set_graph_type(const std::string first_line, graph* current_g
 		return false;
 	}
 
-
-	std::string word;
-	if(iss >> word){
-		//TODO excp
-        std::cout << "graph.txt:" << m_line << ":\033[1;31m" <<  " error: " << "\033[0m";
-		std::cout << "Don't input more arguments in line of about your graph\n" << std::endl;
-		return false;
-	}
-
 	return true;
-}		
+
+}
+
+
 
 bool input_parser::parse_graph(std::stringstream& buffer, graph* current_graph)
 {

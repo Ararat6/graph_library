@@ -16,13 +16,29 @@ bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, std
     int weight_path = v_map[ (*it) -> get_destination_vertex() ];
     int new_weight_path = (*it)->get_weight() + v_map[(*it)->get_source_vertex()];
 
-    if(weight_path == 0 || weight_path > new_weight_path){
-        v_map[(*it)->get_destination_vertex()] = new_weight_path;
-        return true;
-    }
-    return false;
+	if(weight_path == 0 || weight_path > new_weight_path){
+		v_map[(*it)->get_destination_vertex()] = new_weight_path;
+		return true;
+	}
+	return false;
 
 }
+
+bool Dijkstra::short_path_to_map_un(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map)
+{
+	int weight_path = v_map[ (*it) -> get_source_vertex() ];
+	int new_weight_path = (*it)->get_weight() + v_map[(*it)->get_destination_vertex()];
+
+	if(!(*it) -> get_source_vertex()->get_visited()){
+		if(weight_path == 0 || weight_path > new_weight_path){
+			v_map[(*it)->get_source_vertex()] = new_weight_path;
+			return true;
+		}   
+	}     
+	return false;
+} 
+
+
 
 
 void Dijkstra::find_distance()
@@ -43,10 +59,26 @@ void Dijkstra::find_distance()
         std::vector<base_edge*>::const_iterator it_end = curr_vertex->get_edges()->end();
         bool check = true;
         for(; it_begin != it_end; ++it_begin){
-            check = short_path_to_map(it_begin, v_map);
-            if(check == true){
-                que.push((*it_begin)->get_destination_vertex());
-            }
+			if( m_graph->get_direction() == directed
+					&& (*it_begin)->get_source_vertex() == curr_vertex) {
+				check = short_path_to_map(it_begin, v_map);
+				if(check == true){
+					que.push((*it_begin)->get_destination_vertex());
+					check = false;
+				}
+			} else {
+				check = short_path_to_map(it_begin, v_map);
+				if(check == true){
+					check = false;
+					que.push((*it_begin)->get_destination_vertex());
+				} 
+				check = short_path_to_map_un(it_begin, v_map);
+				if(check == true){
+					que.push((*it_begin)->get_source_vertex());
+					check = false;
+				} 
+
+			}
         }
     }
 
@@ -58,6 +90,7 @@ void Dijkstra::set_target_graph(graph* c_graph, const std::string& source, const
 {
     m_graph = c_graph;
     source_vertex = find_vertex(source);
+	source_vertex->set_visited(true);
     destination_vertex = find_vertex(destination);
 }
 

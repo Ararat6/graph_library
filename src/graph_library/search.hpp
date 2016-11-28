@@ -8,7 +8,7 @@ class search
 {
 
 public:
-	/**Setting type of serarching  algorithm*/
+	/**Setting type of searching  algorithm*/
 	virtual void traverse() = 0;
     virtual void set_target_graph(graph* , const std::string&) = 0;
 };

@@ -39,7 +39,7 @@ int main()
 	//    alg_search  -> set_target_graph(test_graph, "v1");
 
 	shortest_path * alg_shortest = new Dijkstra();
-	alg_shortest  -> set_target_graph(test_graph, "v1", "v6");
+	alg_shortest  -> set_target_graph(test_graph, "v1", "v5");
 
 	algorithm alg;
 

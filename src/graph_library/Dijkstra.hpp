@@ -19,6 +19,7 @@ class Dijkstra: public shortest_path
 private:
     void set_distance(int);
     bool short_path_to_map(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map);
+    bool short_path_to_map_un(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map);
 
 private:
     void find_distance();
