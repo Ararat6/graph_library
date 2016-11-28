@@ -18,7 +18,7 @@ void algorithm::traverse()
 
 int algorithm::get_shortest_path()
 {
-    return m_shortest_path->short_path();
+    return m_shortest_path->short_distance();
 }
 
 algorithm::algorithm()

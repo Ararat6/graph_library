@@ -19,6 +19,7 @@ private:
     std::string m_name;
 	int m_degree;
 	bool m_is_visited;
+	std::vector<vertex*> m_shortest_path;
 public:
     /** For adding edge in vertex */
     void add_edge(base_edge* node_edge);
@@ -29,6 +30,9 @@ public:
 	void add_degree();
     /** For getting vertex name */
     std::string get_name() const;
+	std::vector<vertex*>* get_shortest_path();
+	void set_shortest_path(std::vector<vertex*>*);
+
 	void set_visited(const bool is_visited);
 	bool get_visited() const;
 public:

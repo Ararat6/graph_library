@@ -28,9 +28,9 @@ private:
 public:
     //	void set_target_graph(graph* , std::string&);
     void set_target_graph(graph* , const std::string&, const std::string&);
-
+	void show_shortest_path();
 public:
-    int short_path();
+    int short_distance();
 
 public:
     Dijkstra();

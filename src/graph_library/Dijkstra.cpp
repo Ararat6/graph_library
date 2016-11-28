@@ -18,6 +18,7 @@ bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, std
 
 	if(weight_path == 0 || weight_path > new_weight_path){
 		v_map[(*it)->get_destination_vertex()] = new_weight_path;
+		(*it)->get_destination_vertex()->set_shortest_path((*it)->get_source_vertex()->get_shortest_path());
 		return true;
 	}
 	return false;
@@ -32,6 +33,7 @@ bool Dijkstra::short_path_to_map_un(std::vector<base_edge*>::const_iterator it, 
 	if(!(*it) -> get_source_vertex()->get_visited()){
 		if(weight_path == 0 || weight_path > new_weight_path){
 			v_map[(*it)->get_source_vertex()] = new_weight_path;
+			(*it)->get_source_vertex()->set_shortest_path((*it)->get_destination_vertex()->get_shortest_path());
 			return true;
 		}   
 	}     
@@ -44,7 +46,7 @@ bool Dijkstra::short_path_to_map_un(std::vector<base_edge*>::const_iterator it, 
 void Dijkstra::find_distance()
 {
     std::cout << "source = " <<  source_vertex->get_name() <<"\n";//
-    std::cout << "destinatioan = " <<destination_vertex->get_name()<<"\n";//
+    std::cout << "destinatioan = " << destination_vertex->get_name()<<"\n";//
     vertex* curr_vertex;
     std::queue<vertex*> que;
     que.push(source_vertex); 
@@ -67,15 +69,18 @@ void Dijkstra::find_distance()
 					check = false;
 				}
 			} else {
-				check = short_path_to_map(it_begin, v_map);
-				if(check == true){
-					check = false;
-					que.push((*it_begin)->get_destination_vertex());
-				} 
-				check = short_path_to_map_un(it_begin, v_map);
-				if(check == true){
-					que.push((*it_begin)->get_source_vertex());
-					check = false;
+				if((*it_begin)->get_source_vertex() == curr_vertex){
+					check = short_path_to_map(it_begin, v_map);
+					if(check == true){
+						check = false;
+						que.push((*it_begin)->get_destination_vertex());
+					} 
+				} else {
+					check = short_path_to_map_un(it_begin, v_map);
+					if(check == true){
+						que.push((*it_begin)->get_source_vertex());
+						check = false;
+					}
 				} 
 
 			}
@@ -83,7 +88,7 @@ void Dijkstra::find_distance()
     }
 
     set_distance(v_map[destination_vertex]);
-
+	show_shortest_path();
 }
 
 void Dijkstra::set_target_graph(graph* c_graph, const std::string& source, const std::string& destination)
@@ -94,7 +99,26 @@ void Dijkstra::set_target_graph(graph* c_graph, const std::string& source, const
     destination_vertex = find_vertex(destination);
 }
 
-int  Dijkstra::short_path()
+void Dijkstra::show_shortest_path()
+{
+	std::vector<vertex*>* path = destination_vertex->get_shortest_path();
+
+	std::vector<vertex*>::iterator it = path->begin();
+	std::vector<vertex*>::iterator end = path->end();
+
+	std::cout << "Shortest path = ";
+	if(0 == path->size())
+		std::cout << "0 : Not path betwen source and destination ";
+
+	for(;it != end ; ++it) {
+		std::cout << (*it)->get_name() << " " ;
+	}
+		std::cout << "\n";
+
+
+}
+
+int  Dijkstra::short_distance()
 {
     find_distance();
     return m_distance;

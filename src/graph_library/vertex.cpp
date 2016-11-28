@@ -26,6 +26,27 @@ std::string vertex::get_name() const
     return m_name;
 }
 
+std::vector<vertex*>* vertex::get_shortest_path()
+{
+	return &m_shortest_path;
+}
+
+void vertex::set_shortest_path(std::vector<vertex*>* current_path)
+{
+	if(!m_shortest_path.empty()) {
+			m_shortest_path.clear();
+	} 
+
+	std::vector<vertex*>::iterator it = current_path->begin();
+	std::vector<vertex*>::iterator end = current_path->end();
+
+	for(;it != end ; ++it) {
+		m_shortest_path.push_back(*it);
+	}
+	m_shortest_path.push_back(this);
+}
+
+
 void vertex::set_visited(const bool is_visited)
 {
 	m_is_visited = is_visited;
