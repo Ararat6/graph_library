@@ -15,12 +15,10 @@ void Bfs::show_traversal()
 {
 	std::vector<vertex*>::iterator it_begin = m_travers.begin();
     std::vector<vertex*>::iterator it_end = m_travers.end();
-
-	        for(; it_begin != it_end; ++it_begin){
-				std::cout << (*it_begin)->get_name() << " ";
-			}
-
-			std::cout <<"\n";
+	for(; it_begin != it_end; ++it_begin){
+		std::cout << (*it_begin)->get_name() << " ";
+	}
+	std::cout <<"\n";
 }
 
 
@@ -46,7 +44,7 @@ void Bfs::traverse()
 				m_travers.push_back((*it_begin)->get_destination_vertex());
 				(*it_begin)->get_destination_vertex()->set_visited(true);
 
-			} else if((*it_begin)->get_source_vertex()->get_visited() == false){
+			} else if ((*it_begin)->get_source_vertex()->get_visited() == false) {
 				m_queue.push((*it_begin)->get_source_vertex());
 				m_travers.push_back((*it_begin)->get_source_vertex());
 				(*it_begin)->get_source_vertex()->set_visited(true);

@@ -10,38 +10,45 @@ vertex* Dijkstra::find_vertex(const std::string target_vertex)
     return m_graph->get_vertex_by_name(target_vertex);
 }
 
-bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map)
+bool Dijkstra::short_path_to_map(std::vector<base_edge*>::const_iterator it, 
+								 std::map<vertex*,int>& v_map)
 {
+    int first_weight = v_map[(*it)->get_destination_vertex()];
+    int new_weight = (*it)->get_weight() + v_map[(*it)->get_source_vertex()];
 
-    int weight_path = v_map[ (*it) -> get_destination_vertex() ];
-    int new_weight_path = (*it)->get_weight() + v_map[(*it)->get_source_vertex()];
+	vertex* d_vertex = (*it)->get_destination_vertex();
+	vertex* s_vertex = (*it)->get_source_vertex();
+	std::vector<vertex*>* s_path = s_vertex->get_shortest_path();
 
-	if(weight_path == 0 || weight_path > new_weight_path){
-		v_map[(*it)->get_destination_vertex()] = new_weight_path;
-		(*it)->get_destination_vertex()->set_shortest_path((*it)->get_source_vertex()->get_shortest_path());
+	if (first_weight == 0 || 
+		(first_weight > new_weight)) {
+		v_map[(*it)->get_destination_vertex()] = new_weight;
+		d_vertex->set_shortest_path(s_path);
 		return true;
 	}
 	return false;
 
 }
 
-bool Dijkstra::short_path_to_map_un(std::vector<base_edge*>::const_iterator it, std::map<vertex*,int>& v_map)
+bool Dijkstra::short_path_to_map_un(std::vector<base_edge*>::const_iterator it, 
+		   							std::map<vertex*,int>& v_map)
 {
-	int weight_path = v_map[ (*it) -> get_source_vertex() ];
-	int new_weight_path = (*it)->get_weight() + v_map[(*it)->get_destination_vertex()];
+	int first_weight = v_map[ (*it) -> get_source_vertex() ];
+	int new_weight = (*it)->get_weight() + v_map[(*it)->get_destination_vertex()];
+	
+	vertex* d_vertex = (*it)->get_destination_vertex();
+	vertex* s_vertex = (*it)->get_source_vertex();
+	std::vector<vertex*>* d_path = d_vertex->get_shortest_path();
 
 	if(!(*it) -> get_source_vertex()->get_visited()){
-		if(weight_path == 0 || weight_path > new_weight_path){
-			v_map[(*it)->get_source_vertex()] = new_weight_path;
-			(*it)->get_source_vertex()->set_shortest_path((*it)->get_destination_vertex()->get_shortest_path());
+		if(first_weight == 0 || first_weight > new_weight){
+			v_map[(*it)->get_source_vertex()] = new_weight;
+			s_vertex->set_shortest_path(d_path);
 			return true;
 		}   
 	}     
 	return false;
 } 
-
-
-
 
 void Dijkstra::find_distance()
 {
@@ -57,7 +64,7 @@ void Dijkstra::find_distance()
         //std::cout<< "curr_vertex = " << curr_vertex->get_name() <<"\n";
         que.pop();
 
-        std::vector<base_edge*>::const_iterator it_begin   = curr_vertex->get_edges()->begin();
+        std::vector<base_edge*>::const_iterator it_begin = curr_vertex->get_edges()->begin();
         std::vector<base_edge*>::const_iterator it_end = curr_vertex->get_edges()->end();
         bool check = true;
         for(; it_begin != it_end; ++it_begin){
@@ -77,7 +84,7 @@ void Dijkstra::find_distance()
 					} 
 				} else {
 					check = short_path_to_map_un(it_begin, v_map);
-					if(check == true){
+					if(check == true) {
 						que.push((*it_begin)->get_source_vertex());
 						check = false;
 					}
@@ -86,12 +93,13 @@ void Dijkstra::find_distance()
 			}
         }
     }
-
     set_distance(v_map[destination_vertex]);
 	show_shortest_path();
 }
 
-void Dijkstra::set_target_graph(graph* c_graph, const std::string& source, const std::string& destination)
+void Dijkstra::set_target_graph(graph* c_graph, 
+		 						const std::string& source,
+							   	const std::string& destination)
 {
     m_graph = c_graph;
     source_vertex = find_vertex(source);
@@ -107,15 +115,14 @@ void Dijkstra::show_shortest_path()
 	std::vector<vertex*>::iterator end = path->end();
 
 	std::cout << "Shortest path = ";
-	if(0 == path->size())
+	if(0 == path->size()) {
 		std::cout << "0 : Not path betwen source and destination ";
+	}
 
 	for(;it != end ; ++it) {
 		std::cout << (*it)->get_name() << " " ;
 	}
-		std::cout << "\n";
-
-
+	std::cout << "\n";
 }
 
 int  Dijkstra::short_distance()
@@ -128,7 +135,3 @@ Dijkstra::Dijkstra()
     :m_distance(0)
 {
 }
-
-
-
-

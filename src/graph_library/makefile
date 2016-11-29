@@ -27,6 +27,7 @@ cpp_files := vertex.cpp \
 		 	 Dijkstra.cpp \
 			 Dfs.cpp \
 			 Bfs.cpp \
+			 graph_exception.cpp\
 			
 # The header files under the project, which are supposed to be used by other
 # projects.
@@ -42,6 +43,8 @@ public_headers := vertex.hpp \
 				  shortest_path.hpp \
 				  Dfs.hpp \
 				  Bfs.hpp \
+			 	  graph_exception.hpp\
+			
 # Building QT project.
 # TODO: Add detailed comments.
 qt_headers :=
