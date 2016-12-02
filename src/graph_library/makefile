@@ -28,6 +28,7 @@ cpp_files := vertex.cpp \
 			 Dfs.cpp \
 			 Bfs.cpp \
 			 graph_exception.cpp\
+			 subgraph.cpp \
 			
 # The header files under the project, which are supposed to be used by other
 # projects.
@@ -44,6 +45,7 @@ public_headers := vertex.hpp \
 				  Dfs.hpp \
 				  Bfs.hpp \
 			 	  graph_exception.hpp\
+				  subgraph.hpp \
 			
 # Building QT project.
 # TODO: Add detailed comments.

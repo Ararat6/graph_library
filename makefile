@@ -40,7 +40,7 @@ prefix := $(HOME)
 #
 projects :=  \
 	src/graph_library \
-	src/graph_test    \
+	src/graph_library_test    \
 
 
 # Prerequisite tools
@@ -101,4 +101,4 @@ include $(mkf_path)/main.mk
 # Dependencies between projects
 #
 #src/main: src/dynamic_test src/static_test src/shared_test
-src/graph_test: src/graph_library
+src/graph_library_test: src/graph_library

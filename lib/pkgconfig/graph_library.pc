@@ -1,5 +1,5 @@
 
-prefix=/home/student/serob/graph_library
+prefix=/home/firefly/graph_library
 libdir=${prefix}/lib
 includedir=${prefix}/inc
 
