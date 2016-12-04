@@ -1,9 +1,12 @@
 #include "subgraph.hpp"
+#include <cassert>
 
 void subgraph::set_target_graphs(graph* big_graph, graph* small_graph)
 {
 	m_big_graph = big_graph;
+    assert(NULL != m_big_graph);
 	m_small_graph = small_graph;
+    assert(NULL != m_small_graph);
 }
 
 bool subgraph::is_contain_subgraph()
@@ -12,17 +15,15 @@ bool subgraph::is_contain_subgraph()
 		< m_small_graph->get_vertices_count()) {
 		return false;
 	}
+    assert(NULL != m_big_graph);
+    assert(NULL != m_small_graph);
 
-	vertex* lowest_vertex_in_big = lowest_vertex_in_graph(m_big_graph);
-	vertex* lowest_vertex_in_small = lowest_vertex_in_graph(m_small_graph);
-	std::vector<vertex*> vertices_big = BFS(lowest_vertex_in_big);
-	std::vector<vertex*> vertices_small = BFS(lowest_vertex_in_small);
+	std::vector<vertex*> vertices_big = BFS(m_big_graph);
+	std::vector<vertex*> vertices_small = BFS(m_small_graph);
 
 	if(min_bisection(vertices_big, vertices_small)) {
-		std::cout << "Found subgraph" << std::endl;
 		return true;
 	} else {
-		std::cout << "Not found subgraph" << std::endl;
 		return false;
 	}
 }
@@ -52,21 +53,20 @@ bool subgraph::min_bisection(std::vector<vertex*>& vertices_big,
 						|| (*it)->get_source_vertex()->get_name() == half2[j]->get_name() ) {
 
 					if(match(half1[i], half2[j], vertices_small)) {
+                        return true;
 
-
-					}
-
+					}                 
 				}
 			}
 		}
 	}
 
+    return false;
 }
 
-bool match(vertex* c_vertex, vertex* out_vertex, std::vector<vertex *>& vertices_small) {
-
+bool subgraph::match(vertex* c_vertex, vertex* out_vertex, std::vector<vertex *>& vertices_small) 
+{
 	for(unsigned i = 0; i < vertices_small.size(); i++) {
-
 		if(!vertices_small[i]->get_visited() && equal_vertices(c_vertex, vertices_small[i])) {
 			c_vertex->set_visited(true);
 			vertices_small[i]->set_visited(true);
@@ -84,40 +84,133 @@ bool match(vertex* c_vertex, vertex* out_vertex, std::vector<vertex *>& vertices
 }
 
 
-bool equal_vertices (vertex* v1, vertex* v2) {
+bool subgraph::search_sub_graph(vertex* D1, vertex* SmD1, std::vector<vertex*>& vertices_small) {
+
+    std::queue<vertex *> QUE;
+    std::queue<vertex *> D1QUE;
+
+    QUE.push(SmD1);
+    D1QUE.push(D1);
+    SmD1->set_visited(true);
+
+    while(!QUE.empty()) {
+        vertex * currNode = QUE.front();
+        vertex * bigcurrNode = D1QUE.front();
+        QUE.pop();
+        D1QUE.pop();
+
+        std::vector<base_edge*>::const_iterator it_small_vertex = currNode->get_edges()->begin();
+        std::vector<base_edge*>::const_iterator end_small_vertex = currNode->get_edges()->end();
+        std::vector<base_edge*>::const_iterator it_big_vertex = bigcurrNode->get_edges()->begin();
+        std::vector<base_edge*>::const_iterator end_big_vertex = bigcurrNode->get_edges()->end();
+
+        for(; it_small_vertex != end_small_vertex; ++it_small_vertex) {
+            for(; it_big_vertex != end_big_vertex; ++it_big_vertex) {
+                if((*it_small_vertex)->get_source_vertex() == currNode
+                        && equal_vertices((*it_small_vertex)->get_destination_vertex()
+                            , (*it_big_vertex)->get_destination_vertex())
+                        && !(*it_small_vertex)->get_destination_vertex()->get_visited()
+                        && !(*it_big_vertex)->get_destination_vertex()->get_visited()) {
+
+                    (*it_small_vertex)->get_destination_vertex()->set_visited(true);
+                    (*it_big_vertex)->get_destination_vertex()->set_visited(true);
+                    QUE.push((*it_small_vertex)->get_destination_vertex());
+                    D1QUE.push((*it_big_vertex)->get_destination_vertex());
+                    break;
+
+                } else if (equal_vertices((*it_small_vertex)->get_source_vertex()
+                            , (*it_big_vertex)->get_source_vertex())
+                        && !(*it_small_vertex)->get_source_vertex()->get_visited()
+                        && !(*it_big_vertex)->get_source_vertex()->get_visited()) {
+
+                    (*it_small_vertex)->get_source_vertex()->set_visited(true);
+                    (*it_big_vertex)->get_source_vertex()->set_visited(true);
+                    QUE.push((*it_small_vertex)->get_source_vertex());
+                    D1QUE.push((*it_big_vertex)->get_source_vertex());
+                    break;
+                }
+            }
+        }
+
+        for(; it_small_vertex != end_small_vertex; ++it_small_vertex) {
+            if((*it_small_vertex)->get_source_vertex()->get_visited()) {
+                return false;
+            }
+        }
+    }
+
+
+
+    for(unsigned i = 0; i < vertices_small.size(); i++) {
+        if(!vertices_small[i]->get_visited()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+vertex* subgraph::get_lowest_vertex(graph* current_graph)
+{
+    std::map<std::string, vertex*>::const_iterator it = current_graph->get_vertices()->begin();
+    std::map<std::string, vertex*>::const_iterator end = current_graph->get_vertices()->end();
+
+    int degree = it->second->get_degree();
+    vertex* lowest_vertex = it->second;
+    for(; it != end; ++it) {
+        if(degree > it->second->get_degree()){
+            degree = it->second->get_degree();
+            lowest_vertex = it->second;
+        }
+    }
+    return lowest_vertex;
+
+
+}
+
+bool subgraph::equal_vertices (vertex* v1, vertex* v2) {
 	return (v1->get_name() == v2->get_name());
 }
 
-
-
-std::vector<vertex*> BFS (graph* )
+std::vector<vertex*> subgraph::BFS (graph* current_graph)
 {
-	SDG -> resetMarks(); // set all marks 0
-	std::queue<DepGraphNode *> q;
 
+    vertex* c_vertex = get_lowest_vertex(current_graph);
+    current_graph->set_unvisited();
+    std::queue<vertex*> m_queue;
+    m_queue.push(c_vertex);
+    std::vector<vertex*> m_travers;
+    m_travers.push_back(c_vertex);
 
-	for (auto itr = SDG->getVectBeginIterator(), end = SDG->getVectEndIterator(); itr != end; itr++) {
-		if((*itr)->getInDepCount() == 0) {
-			//sortedNodes.push_back(*itr);
-			q.push(*itr);
-			(*itr)->setMark(1);
-		}
-	}
+        std::cout <<std::endl;
+    while(!m_queue.empty()){
+        vertex* current_vertex = m_queue.front();
+        m_queue.pop();
+        current_vertex->set_visited(true);
+        std::cout <<  current_vertex->get_name() <<std::endl;
 
-	while (!q.empty()) {
-		DepGraphNode * currentNode = q.front();
-		sortedNodes.push_back(currentNode);
-		q.pop();// pop front
+        std::vector<base_edge*>::const_iterator it_begin = current_vertex->get_edges()->begin();
+        std::vector<base_edge*>::const_iterator it_end = current_vertex->get_edges()->end();
 
-		for (DependenceGraph::iterator out = SDG -> outDepBegin(currentNode); out != SDG -> outDepEnd(currentNode); ++out) {
-			DepGraphNode* ni = out->getSink();
-			if (!ni->getMark())
-			{
-				ni->setMark(1);
-				q.push(ni);
-			}
-		}
+        for(; it_begin != it_end; ++it_begin){
+            if((*it_begin)->get_source_vertex() == current_vertex
+                    && (*it_begin)->get_destination_vertex()->get_visited() == false){
+                m_queue.push((*it_begin)->get_destination_vertex());
+                m_travers.push_back((*it_begin)->get_destination_vertex());
+                (*it_begin)->get_destination_vertex()->set_visited(true);
 
-	}
+            } else if ((*it_begin)->get_source_vertex()->get_visited() == false) {
+                m_queue.push((*it_begin)->get_source_vertex());
+                m_travers.push_back((*it_begin)->get_source_vertex());
+                (*it_begin)->get_source_vertex()->set_visited(true);
+            }
+        }
+    }
+    current_graph->set_unvisited();
+    return m_travers;
 }
 
+subgraph::subgraph() :m_big_graph(NULL)
+                      ,m_small_graph(NULL)
+{
+}

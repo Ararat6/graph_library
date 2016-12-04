@@ -75,6 +75,22 @@ int graph::get_vertices_count() const
 	return m_vertices.size();
 }
 
+const std::map<std::string, vertex*>* graph::get_vertices() const
+{
+    return &m_vertices;
+}
+
+void graph::set_unvisited()
+{
+	std::map<std::string, vertex*>::iterator it = m_vertices.begin();
+	std::map<std::string, vertex*>::iterator end = m_vertices.end();
+
+	for(; it != end; ++it) {
+        it->second->set_visited(false);
+    }
+    
+}
+
 void graph::show_graph() 
 {
 	std::map<std::string, vertex*>::iterator it = m_vertices.begin();

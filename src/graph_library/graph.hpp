@@ -39,7 +39,9 @@ public:
 	void set_direction(direction dir);
 	edge_weight get_edge_weight() const;
 	void set_edge_weight(edge_weight weight);
+    void set_unvisited();
 	int get_vertices_count() const;
+    const std::map<std::string, vertex*>* get_vertices() const;
 	void show_graph();
 public:
     /** Constructor */
